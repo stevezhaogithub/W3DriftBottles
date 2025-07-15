@@ -1,15 +1,53 @@
-# Remix compiler artifacts
-**/artifacts/
-**/artifacts/**
+# Node.js dependencies
+node_modules/
+npm-debug.log
+yarn-error.log
+yarn.lock
+package-lock.json
 
-# Remix plugin state folders
+# Hardhat build artifacts
+artifacts/
+cache/
+coverage/
+coverage.json
+typechain/
+typechain-types/
+ignition/deployments/chain-31337/
+
+# Remix compiler artifacts and plugin state
+**/artifacts/
 deps/
 states/
 
-# Debug info
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Build output
+dist/
+build/
+
+# Testing
+test-results/
+playwright-report/
+playwright/.cache/
+
+# VS Code
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+*.code-workspace
+
+# Debug and temporary files
 *.dbg.json
 *.tsbuildinfo
+*.log
+*.swp
+*.swo
 
-# Optional
-.env
-.env.local
+# OS generated files
+.DS_Store
+Thumbs.db
