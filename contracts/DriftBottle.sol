@@ -1,6 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.28;
 
+// 接口合约
+interface IDriftBottleToken {
+    function mint(address to, uint256 amount) external;
+}
+
 // 漂流瓶合约
 contract DriftBottle {
     // 漂流瓶结构体
@@ -23,6 +28,9 @@ contract DriftBottle {
     // 管理员
     address internal admin;
 
+    // 奖励数量
+    uint256 public rewardAmount;
+
     // 每个调用合约的用户接收的漂流瓶
     mapping(address => uint256[])
         private receiveBottles; /* 用户addr 映射 bottleId */
@@ -43,10 +51,17 @@ contract DriftBottle {
         string ipfsHash
     );
 
+    // 声明一个接口合约状态变量
+    IDriftBottleToken public tokenContract;
+
     // 构造函数
-    constructor() {
+    // _initReward: 初始化奖励金额
+    constructor(address _tokenAddress, uint256 _initReward) {
+        tokenContract = IDriftBottleToken(_tokenAddress);
         // 将部署合约的用户设置为 admin
         admin = msg.sender;
+        // 设置初始的奖励
+        rewardAmount = _initReward;
     }
 
     // 扔出一个漂流瓶
@@ -74,6 +89,9 @@ contract DriftBottle {
         bottlesLeft++;
 
         emit BottleAdded(bottleId, msg.sender, _ipfsHash);
+
+        // 每次扔出一个漂流瓶给 token 奖励, 奖励数量为 rewardAmount
+        tokenContract.mint(msg.sender, rewardAmount);
     }
 
     // 抓漂流瓶
@@ -136,5 +154,15 @@ contract DriftBottle {
         bottlesLeft++;
 
         emit BottleUpdated(_bottleId, msg.sender, _ipfsHash);
+    }
+
+    // 重新设置 rewardAmount 奖励数量
+    function setRewardAmount(uint256 _newReward) public onlyAdmin {
+        rewardAmount = _newReward;
+    }
+
+    modifier onlyAdmin() {
+        require(msg.sender == admin, "only admin can invoke.");
+        _;
     }
 }
