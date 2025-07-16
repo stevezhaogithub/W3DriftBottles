@@ -5,18 +5,21 @@ const {
 } = require('@nomicfoundation/hardhat-toolbox/network-helpers')
 
 describe('DriftBottle System', function () {
+
     async function setupFixture() {
         const [owner, user1] = await ethers.getSigners()
         const driftBottleToken = await ethers.deployContract('DriftBottleToken')
         await driftBottleToken.waitForDeployment()
         const driftBottleTokenAddr = await driftBottleToken.getAddress()
 
+
         const driftBottle = await ethers.deployContract('DriftBottle', [
-            driftBottleAddr,
+            driftBottleTokenAddr,
             '10000000000000000000',
         ])
-        await driftBottle.waitForDeployment()
         const driftBottleAddr = await driftBottle.getAddress()
+        await driftBottle.waitForDeployment()
+
 
         await driftBottleToken.grantMinterRole(driftBottleAddr)
 

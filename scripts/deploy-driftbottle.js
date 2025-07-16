@@ -10,7 +10,7 @@ async function main() {
 
     // 2. deploy DriftBottle contract
     const driftBottle = await ethers.deployContract('DriftBottle', [
-        driftBottleAddr,
+        driftBottleTokenAddr,
         '10000000000000000000',
     ]);
     await driftBottle.waitForDeployment()
